@@ -1,0 +1,1459 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121a;
+    --bg-tertiary: #1a1a26;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0b0;
+    --text-muted: #606070;
+    --neon-blue: #00d4ff;
+    --neon-green: #00ff88;
+    --neon-orange: #ff6b35;
+    --neon-pink: #ff2e97;
+    --border: rgba(255, 255, 255, 0.08);
+    --shadow: rgba(0, 0, 0, 0.5);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-screen>div {
+    text-align: center;
+}
+
+.loading-icon {
+    color: var(--neon-blue);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-screen h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 0.3em;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+}
+
+/* Navigation */
+.nav {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.75rem;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: transform 0.2s;
+}
+
+.logo:hover {
+    transform: translateY(-2px);
+}
+
+.logo svg {
+    color: var(--neon-blue);
+    filter: drop-shadow(0 0 8px var(--neon-blue));
+}
+
+.logo-accent {
+    color: var(--neon-green);
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    position: relative;
+    transition: color 0.2s;
+    border-radius: 4px;
+}
+
+.nav-link:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.nav-link.active {
+    color: var(--neon-blue);
+}
+
+.nav-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+}
+
+.page {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--bg-tertiary);
+    border-top-color: var(--neon-blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.page-header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    letter-spacing: 0.15em;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+.page-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+/* Buttons */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+    color: var(--bg-primary);
+    border: none;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.5);
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: var(--bg-secondary);
+    border-color: var(--neon-blue);
+}
+
+.btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-icon:hover {
+    background: var(--bg-secondary);
+    color: var(--neon-blue);
+    border-color: var(--neon-blue);
+}
+
+.btn-icon.active {
+    background: var(--neon-green);
+    color: var(--bg-primary);
+    border-color: var(--neon-green);
+}
+
+.btn-icon-danger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-icon-danger:hover {
+    background: var(--neon-orange);
+    color: var(--bg-primary);
+    border-color: var(--neon-orange);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    position: relative;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    border-color: var(--neon-blue);
+}
+
+.stat-icon {
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.stat-content {
+    flex: 1;
+    z-index: 1;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+}
+
+.stat-glow {
+    position: absolute;
+    top: 50%;
+    right: -50%;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    opacity: 0.08;
+    filter: blur(60px);
+    pointer-events: none;
+}
+
+/* Motivational Banner */
+.motivational-banner {
+    position: relative;
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2.5rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 1;
+}
+
+.motivational-banner h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 0.2em;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.motivational-banner p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}
+
+.banner-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1), transparent 70%);
+    pointer-events: none;
+}
+
+/* Workouts Grid */
+.workouts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.workout-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.2s;
+}
+
+.workout-card:hover {
+    border-color: var(--neon-blue);
+}
+
+.workout-card.completed {
+    border-color: var(--neon-green);
+    background: linear-gradient(135deg, var(--bg-secondary), rgba(0, 255, 136, 0.05));
+}
+
+.workout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.workout-day {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.workout-muscle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.05em;
+    color: var(--neon-blue);
+    margin-top: 0.25rem;
+}
+
+.workout-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.exercises-list {
+    margin-top: 1rem;
+}
+
+.exercise-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.exercise-item:last-child {
+    border-bottom: none;
+}
+
+.exercise-item-with-image {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+}
+
+.exercise-item-with-image:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--neon-blue);
+}
+
+.exercise-item-with-image:last-child {
+    border-bottom: none;
+}
+
+.exercise-image-thumb {
+    width: 80px;
+    height: 50px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+}
+
+.exercise-image-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.exercise-content {
+    flex: 1;
+}
+
+.exercise-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-icon {
+    color: var(--neon-blue);
+    opacity: 0.6;
+}
+
+.exercise-details {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Exercise Detail Modal */
+.exercise-detail-modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+    position: relative;
+}
+
+.exercise-detail-image {
+    width: 100%;
+    height: 300px;
+    background: var(--bg-tertiary);
+    overflow: hidden;
+}
+
+.exercise-detail-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.exercise-detail-info {
+    padding: 2rem;
+}
+
+.exercise-detail-info h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 0.1em;
+    color: var(--neon-blue);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.exercise-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.stat-box {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.stat-box .stat-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.stat-box .stat-value {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--neon-green);
+    letter-spacing: 0.05em;
+}
+
+.completion-badge {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: var(--neon-green);
+    color: var(--bg-primary);
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    border-radius: 4px;
+}
+
+/* Meals Grid */
+.meals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+}
+
+.meal-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.2s;
+}
+
+.meal-card:hover {
+    border-color: var(--neon-green);
+}
+
+.meal-card.consumed {
+    border-color: var(--neon-green);
+    background: linear-gradient(135deg, var(--bg-secondary), rgba(0, 255, 136, 0.05));
+}
+
+.meal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.meal-day {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.meal-type {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.05em;
+    color: var(--neon-green);
+    margin-top: 0.25rem;
+}
+
+.meal-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.foods-list {
+    margin: 1rem 0;
+}
+
+.food-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.food-item:last-child {
+    border-bottom: none;
+}
+
+.food-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.food-macros {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.meal-totals {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.total-item {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.macro-breakdown {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.consumption-badge {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: var(--neon-green);
+    color: var(--bg-primary);
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    border-radius: 4px;
+}
+
+/* Progress */
+.progress-form-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.progress-form-card h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.1em;
+    color: var(--neon-blue);
+    margin-bottom: 1.5rem;
+}
+
+.trend-card {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.trend-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.trend-icon {
+    flex-shrink: 0;
+}
+
+.trend-icon.down {
+    color: var(--neon-green);
+}
+
+.trend-icon.up {
+    color: var(--neon-orange);
+}
+
+.trend-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.trend-value {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.05em;
+}
+
+.progress-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.progress-entry {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 150px 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    transition: border-color 0.2s;
+}
+
+.progress-entry:hover {
+    border-color: var(--neon-blue);
+}
+
+.entry-date {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--neon-blue);
+}
+
+.entry-stats {
+    display: flex;
+    gap: 2rem;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    margin-top: 0.25rem;
+}
+
+.entry-notes {
+    grid-column: 1 / -1;
+    color: var(--text-secondary);
+    font-style: italic;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+/* Forms */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.875rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: 'Rajdhani', sans-serif;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--neon-blue);
+}
+
+.exercise-row,
+.food-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.exercise-row input,
+.food-row input {
+    flex: 1;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.1em;
+    color: var(--neon-blue);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal .form {
+    padding: 1.5rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-secondary);
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+}
+
+/* Login Screen */
+.login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-primary);
+    padding: 2rem;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 450px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3rem;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-icon {
+    color: var(--neon-blue);
+    filter: drop-shadow(0 0 12px var(--neon-blue));
+    margin-bottom: 1rem;
+}
+
+.login-header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 0.2em;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.login-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid var(--neon-orange);
+    border-radius: 4px;
+    color: var(--neon-orange);
+    font-size: 0.9rem;
+}
+
+.success-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid var(--neon-green);
+    border-radius: 4px;
+    color: var(--neon-green);
+    font-size: 0.9rem;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border);
+}
+
+.divider span {
+    padding: 0 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.875rem 1.75rem;
+    background: #ffffff;
+    color: #1f1f1f;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.btn-google:hover:not(:disabled) {
+    background: #f8f8f8;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.btn-google:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-google svg {
+    flex-shrink: 0;
+}
+
+.auth-toggle {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+}
+
+.toggle-link {
+    background: none;
+    border: none;
+    color: var(--neon-blue);
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: 600;
+}
+
+.toggle-link:hover {
+    color: var(--neon-green);
+    text-decoration: underline;
+}
+
+.login-demo {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.demo-title {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.demo-accounts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.demo-account {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.demo-account strong {
+    color: var(--neon-blue);
+    font-weight: 600;
+}
+
+.demo-account code {
+    color: var(--text-secondary);
+    font-family: 'Rajdhani', monospace;
+}
+
+/* Nav User Info */
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    margin-left: 1rem;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.user-email {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.user-role {
+    font-size: 0.75rem;
+    color: var(--neon-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+}
+
+.btn-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-logout:hover {
+    background: var(--neon-orange);
+    color: var(--bg-primary);
+    border-color: var(--neon-orange);
+}
+
+/* Info Banner */
+.info-banner {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.1));
+    border: 1px solid var(--neon-blue);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.info-banner p {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Day Tabs */
+.day-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.day-tab {
+    position: relative;
+    padding: 0.875rem 1.5rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.day-tab:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--neon-blue);
+    color: var(--text-primary);
+}
+
+.day-tab.active {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+    border-color: var(--neon-blue);
+    color: var(--bg-primary);
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.workout-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.day-tab.active .workout-count {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Day View */
+.workouts-day-view {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.day-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.1em;
+    color: var(--neon-blue);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 73px;
+        left: 0;
+        right: 0;
+        background: var(--bg-secondary);
+        flex-direction: column;
+        padding: 1rem;
+        border-bottom: 1px solid var(--border);
+        transform: translateY(-100%);
+        opacity: 0;
+        transition: transform 0.3s, opacity 0.3s;
+        pointer-events: none;
+        z-index: 99;
+    }
+
+    .nav-links.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .nav-link {
+        width: 100%;
+        animation: slideIn 0.3s ease-out forwards;
+    }
+
+    .nav-user {
+        margin-left: 0;
+        margin-top: 1rem;
+        width: 100%;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .page-header {
+        flex-direction: column;
+    }
+
+    .page-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .workouts-grid,
+    .meals-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .progress-entry {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .entry-stats {
+        flex-wrap: wrap;
+    }
+
+    .main-content {
+        padding: 1.5rem 1rem;
+    }
+
+    .day-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 0.5rem;
+    }
+
+    .day-tab {
+        flex-shrink: 0;
+    }
+
+    .login-container {
+        padding: 2rem;
+    }
+
+    .login-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .exercise-detail-image {
+        height: 200px;
+    }
+
+    .exercise-detail-info h2 {
+        font-size: 2rem;
+    }
+
+    .exercise-image-thumb {
+        width: 60px;
+        height: 40px;
+    }
+}
