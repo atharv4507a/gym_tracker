@@ -36,35 +36,54 @@ export function AuthProvider({ children }) {
   }, []);
 
   const signIn = async (email, password) => {
-    console.log('Attempting sign in to:', '/api/auth/login');
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const baseUrl = import.meta.env.VITE_API_URL || '';
+      console.log('Attempting sign in to:', `${baseUrl}/api/auth/login`);
+      
+      const res = await fetch(`${baseUrl}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || 'Login failed');
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Server returned non-JSON response:', text);
+        throw new Error('Server error: API not reachable or returned invalid format');
+      }
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      localStorage.setItem('token', data.token);
+      setUser(data);
+    } catch (err) {
+      console.error('Sign in error:', err);
+      throw err;
     }
-
-    localStorage.setItem('token', data.token);
-    setUser(data);
   };
 
   const signUp = async (email, password) => {
-    const res = await fetch('/api/auth/register', {
+    const baseUrl = import.meta.env.VITE_API_URL || '';
+    const res = await fetch(`${baseUrl}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
+
+    const contentType = res.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Server error: API not reachable');
+    }
 
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.message || 'Registration failed');
     }
     
-    // Auto-login after registration is not required by existing UI flow, but we can return data
     return data;
   };
 
