@@ -36,6 +36,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const signIn = async (email, password) => {
+    console.log('Attempting sign in to:', '/api/auth/login');
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
