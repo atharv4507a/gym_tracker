@@ -44,7 +44,7 @@ app.get('/api/_wake', (req, res) => {
 });
 
 // Catch-all for API routes to debug 404s
-app.use('/api/(.*)', (req, res) => {
+app.use('/api', (req, res) => {
   console.log(`404 at ${req.originalUrl}`);
   res.status(404).json({ message: `API route not found: ${req.originalUrl}` });
 });
