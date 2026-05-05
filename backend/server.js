@@ -18,6 +18,9 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 // Connect to database
+if (!process.env.MONGO_URI && process.env.NODE_ENV === 'production') {
+  console.warn('WARNING: MONGO_URI is not defined in production environment!');
+}
 connectDB();
 
 const app = express();
