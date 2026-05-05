@@ -159,19 +159,7 @@ export default function Login() {
           </div>
         </form>
 
-        <div className="login-demo">
-          <p className="demo-title">Demo Accounts:</p>
-          <div className="demo-accounts">
-            <div className="demo-account">
-              <strong>Admin:</strong>
-              <code>admin@irontrack.com / admin123</code>
-            </div>
-            <div className="demo-account">
-              <strong>User:</strong>
-              <code>user@irontrack.com / user123</code>
-            </div>
-          </div>
-        </div>
+
       </motion.div>
     </div>
   );
