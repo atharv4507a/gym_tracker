@@ -725,6 +725,19 @@ body {
     margin-bottom: 0.25rem;
 }
 
+.food-name .nonveg {
+    color: var(--neon-orange);
+}
+
+.food-name .sep {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.food-name .vegalternative {
+    color: var(--neon-green);
+}
+
 .food-macros {
     font-size: 0.875rem;
     color: var(--text-secondary);

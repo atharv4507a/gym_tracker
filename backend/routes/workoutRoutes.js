@@ -17,12 +17,13 @@ router.get('/', protect, async (req, res) => {
 
 router.post('/', protect, admin, async (req, res) => {
   try {
-    const { day_of_week, muscle_group, exercises } = req.body;
+    const { day_of_week, muscle_group, exercises, goal } = req.body;
     const workout = await Workout.create({
       user: req.user.id,
       day_of_week,
       muscle_group,
       exercises,
+      goal: goal || 'general'
     });
     res.status(201).json({ ...workout.toObject(), id: workout._id.toString() });
   } catch (error) {

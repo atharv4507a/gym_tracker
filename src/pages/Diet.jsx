@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Check, X, Trash2 } from 'lucide-react';
 import { useAuth } from '../lib/auth';
+import Toast, { showToast } from '../components/Toast';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const MEAL_TYPES = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
@@ -12,9 +13,11 @@ export default function Diet() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [selectedDay, setSelectedDay] = useState('Monday');
+  const [filterGoal, setFilterGoal] = useState('general');
   const [formData, setFormData] = useState({
     day_of_week: 'Monday',
     meal_type: 'Breakfast',
+    goal: 'general',
     foods: [{ name: '', calories: 0, protein: 0, carbs: 0, fats: 0 }],
   });
 
@@ -63,6 +66,7 @@ export default function Diet() {
       setFormData({
         day_of_week: 'Monday',
         meal_type: 'Breakfast',
+        goal: formData.goal,
         foods: [{ name: '', calories: 0, protein: 0, carbs: 0, fats: 0 }],
       });
       fetchMeals();
@@ -70,14 +74,16 @@ export default function Diet() {
   };
 
   const toggleConsumed = async (meal) => {
+    const newStatus = !meal.consumed;
     await fetch('/api/meals', {
       method: 'PUT',
       headers: { 
         'Content-Type': 'application/json',
         Authorization: `Bearer ${getToken()}`
       },
-      body: JSON.stringify({ id: meal.id, consumed: !meal.consumed }),
+      body: JSON.stringify({ id: meal.id, consumed: newStatus }),
     });
+    showToast(newStatus ? 'Meal consumed! 🍽️' : 'Meal unmarked');
     fetchMeals();
   };
 
@@ -114,9 +120,11 @@ export default function Diet() {
     });
   };
 
+  const filteredMeals = meals.filter(m => (m.goal || 'general') === filterGoal);
+
   const mealsByDay = DAYS.map(day => ({
     day,
-    meals: meals.filter(m => m.day_of_week === day),
+    meals: filteredMeals.filter(m => m.day_of_week === day),
   }));
 
   const currentDayMeals = mealsByDay.find(d => d.day === selectedDay)?.meals || [];
@@ -165,6 +173,19 @@ export default function Diet() {
         </motion.div>
       )}
 
+      <div className="day-tabs" style={{ marginBottom: '1rem', justifyContent: 'center' }}>
+        {['general', 'weight_loss', 'muscle_gain', 'weight_gain'].map(goal => (
+          <button
+            key={goal}
+            className={`day-tab ${filterGoal === goal ? 'active' : ''}`}
+            onClick={() => setFilterGoal(goal)}
+            style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}
+          >
+            {goal.replace(/_/g, ' ').toUpperCase()}
+          </button>
+        ))}
+      </div>
+
       <AnimatePresence>
         {showForm && isAdmin && (
           <motion.div
@@ -207,6 +228,19 @@ export default function Diet() {
                       onChange={(e) => setFormData({ ...formData, meal_type: e.target.value })}
                     >
                       {MEAL_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Fitness Goal</label>
+                    <select
+                      value={formData.goal}
+                      onChange={(e) => setFormData({ ...formData, goal: e.target.value })}
+                    >
+                      <option value="general">General</option>
+                      <option value="weight_loss">Weight Loss</option>
+                      <option value="muscle_gain">Muscle Gain</option>
+                      <option value="weight_gain">Weight Gain</option>
                     </select>
                   </div>
                 </div>
@@ -339,14 +373,21 @@ export default function Diet() {
                 </div>
 
                 <div className="foods-list">
-                  {meal.foods.map((food, i) => (
-                    <div key={i} className="food-item">
-                      <div className="food-name">{food.name}</div>
-                      <div className="food-macros">
-                        {food.calories}cal · P:{food.protein}g · C:{food.carbs}g · F:{food.fats}g
+                  {meal.foods.map((food, i) => {
+                    const parts = food.name.split(' / ');
+                    return (
+                      <div key={i} className="food-item">
+                        <div className="food-name">
+                          {parts.length > 1 ? (
+                            <><span className="nonveg">{parts[0]}</span><span className="sep"> / </span><span className="vegalternative">{parts[1]}</span></>
+                          ) : food.name}
+                        </div>
+                        <div className="food-macros">
+                          {food.calories}cal · P:{food.protein}g · C:{food.carbs}g · F:{food.fats}g
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <div className="meal-totals">
@@ -367,6 +408,7 @@ export default function Diet() {
           </div>
         )}
       </div>
+      <Toast />
     </motion.div>
   );
 }

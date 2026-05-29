@@ -24,6 +24,11 @@ const workoutSchema = new mongoose.Schema({
     reps: String,
     weight: String,
   }],
+  goal: {
+    type: String,
+    enum: ['general', 'weight_loss', 'muscle_gain', 'weight_gain'],
+    default: 'general',
+  },
 }, {
   timestamps: true,
 });

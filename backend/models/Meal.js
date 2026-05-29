@@ -29,6 +29,11 @@ const mealSchema = new mongoose.Schema({
   total_protein: { type: Number, default: 0 },
   total_carbs: { type: Number, default: 0 },
   total_fats: { type: Number, default: 0 },
+  goal: {
+    type: String,
+    enum: ['general', 'weight_loss', 'muscle_gain', 'weight_gain'],
+    default: 'general',
+  },
 }, {
   timestamps: true,
 });

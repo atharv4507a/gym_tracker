@@ -220,14 +220,24 @@ export default function Progress() {
       >
         <div className="card-header">
           <h2>Body Metrics</h2>
-          <div className="height-input">
-            <label>Height (cm)</label>
+          <div className="height-input" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
+            <label style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', textTransform: 'uppercase', fontWeight: 600 }}>
+              Height (cm)
+            </label>
             <input 
               type="number" 
               placeholder="175" 
               defaultValue={175}
               onChange={(e) => setHeight(parseInt(e.target.value))}
-              style={{ width: '80px', marginLeft: '10px' }}
+              style={{ 
+                width: '90px', 
+                padding: '0.5rem', 
+                background: 'var(--bg-tertiary)', 
+                border: '1px solid var(--border)', 
+                borderRadius: '4px', 
+                color: 'var(--text-primary)',
+                outline: 'none'
+              }}
             />
           </div>
         </div>

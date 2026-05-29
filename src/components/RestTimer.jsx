@@ -15,8 +15,19 @@ export default function RestTimer() {
       }, 1000);
     } else if (timeLeft === 0) {
       setIsActive(false);
-      // Play a subtle sound or vibrate if possible in web
-      if ('vibrate' in navigator) navigator.vibrate(200);
+      if ('vibrate' in navigator) navigator.vibrate(500);
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 800;
+        osc.type = 'sine';
+        gain.gain.value = 0.5;
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
+      } catch (_) {}
       clearInterval(interval);
     }
     return () => clearInterval(interval);

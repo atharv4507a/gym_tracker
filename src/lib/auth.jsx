@@ -97,6 +97,24 @@ export function AuthProvider({ children }) {
     return localStorage.getItem('token');
   };
 
+  // Update user fitness goal
+  const updateGoal = async (goal) => {
+    const token = localStorage.getItem('token');
+    const res = await fetch('/api/auth/goal', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ goal }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.message || 'Failed to update goal');
+    }
+    setUser(prev => ({ ...prev, fitness_goal: goal }));
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -106,6 +124,7 @@ export function AuthProvider({ children }) {
         signUp,
         signOut,
         getToken,
+        updateGoal,
         isAdmin: user?.role === 'admin',
       }}
     >

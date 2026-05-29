@@ -4,6 +4,7 @@ import { Plus, Check, X, Trash2, Info } from 'lucide-react';
 import { useAuth } from '../lib/auth';
 import { getExerciseImage } from '../lib/exerciseImages';
 import RestTimer from '../components/RestTimer';
+import Toast, { showToast } from '../components/Toast';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -14,9 +15,11 @@ export default function Workouts() {
   const [showForm, setShowForm] = useState(false);
   const [selectedDay, setSelectedDay] = useState('Monday');
   const [selectedExercise, setSelectedExercise] = useState(null);
+  const [filterGoal, setFilterGoal] = useState('general');
   const [formData, setFormData] = useState({
     day_of_week: 'Monday',
     muscle_group: '',
+    goal: 'general',
     exercises: [{ name: '', sets: 3, reps: '10', weight: '' }],
   });
 
@@ -55,6 +58,7 @@ export default function Workouts() {
       setFormData({
         day_of_week: 'Monday',
         muscle_group: '',
+        goal: formData.goal,
         exercises: [{ name: '', sets: 3, reps: '10', weight: '' }],
       });
       fetchWorkouts();
@@ -62,14 +66,16 @@ export default function Workouts() {
   };
 
   const toggleComplete = async (workout) => {
+    const newStatus = !workout.completed;
     await fetch('/api/workouts', {
       method: 'PUT',
       headers: { 
         'Content-Type': 'application/json',
         Authorization: `Bearer ${getToken()}`
       },
-      body: JSON.stringify({ id: workout.id, completed: !workout.completed }),
+      body: JSON.stringify({ id: workout.id, completed: newStatus }),
     });
+    showToast(newStatus ? 'Workout completed! 🎉' : 'Workout unmarked');
     fetchWorkouts();
   };
 
@@ -106,9 +112,11 @@ export default function Workouts() {
     });
   };
 
+  const filteredWorkouts = workouts.filter(w => (w.goal || 'general') === filterGoal);
+
   const workoutsByDay = DAYS.map(day => ({
     day,
-    workouts: workouts.filter(w => w.day_of_week === day),
+    workouts: filteredWorkouts.filter(w => w.day_of_week === day),
   }));
 
   const currentDayWorkouts = workoutsByDay.find(d => d.day === selectedDay)?.workouts || [];
@@ -157,6 +165,19 @@ export default function Workouts() {
         </motion.div>
       )}
 
+      <div className="day-tabs" style={{ marginBottom: '1rem', justifyContent: 'center' }}>
+        {['general', 'weight_loss', 'muscle_gain', 'weight_gain'].map(goal => (
+          <button
+            key={goal}
+            className={`day-tab ${filterGoal === goal ? 'active' : ''}`}
+            onClick={() => setFilterGoal(goal)}
+            style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}
+          >
+            {goal.replace('_', ' ').toUpperCase()}
+          </button>
+        ))}
+      </div>
+
       <AnimatePresence>
         {showForm && isAdmin && (
           <motion.div
@@ -188,6 +209,19 @@ export default function Workouts() {
                     onChange={(e) => setFormData({ ...formData, day_of_week: e.target.value })}
                   >
                     {DAYS.map(day => <option key={day} value={day}>{day}</option>)}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Fitness Goal</label>
+                  <select
+                    value={formData.goal}
+                    onChange={(e) => setFormData({ ...formData, goal: e.target.value })}
+                  >
+                    <option value="general">General</option>
+                    <option value="weight_loss">Weight Loss</option>
+                    <option value="muscle_gain">Muscle Gain</option>
+                    <option value="weight_gain">Weight Gain</option>
                   </select>
                 </div>
 
@@ -399,7 +433,8 @@ export default function Workouts() {
           </div>
         )}
       </div>
-      <RestTimer />
+      {!isAdmin && <RestTimer />}
+      <Toast />
     </motion.div>
   );
 }

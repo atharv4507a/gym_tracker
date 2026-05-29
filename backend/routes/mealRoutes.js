@@ -16,7 +16,7 @@ router.get('/', protect, async (req, res) => {
 
 router.post('/', protect, admin, async (req, res) => {
   try {
-    const { day_of_week, meal_type, foods, total_calories, total_protein, total_carbs, total_fats } = req.body;
+    const { day_of_week, meal_type, foods, total_calories, total_protein, total_carbs, total_fats, goal } = req.body;
     const meal = await Meal.create({
       user: req.user.id,
       day_of_week,
@@ -25,7 +25,8 @@ router.post('/', protect, admin, async (req, res) => {
       total_calories,
       total_protein,
       total_carbs,
-      total_fats
+      total_fats,
+      goal: goal || 'general'
     });
     res.status(201).json({ ...meal.toObject(), id: meal._id.toString() });
   } catch (error) {

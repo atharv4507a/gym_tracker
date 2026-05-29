@@ -18,14 +18,17 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  fitness_goal: {
+    type: String,
+    enum: ['general', 'weight_loss', 'muscle_gain', 'weight_gain'],
+    default: 'general',
+  },
 }, {
   timestamps: true,
 });
 
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) {
-    next();
-  }
+userSchema.pre('save', async function() {
+  if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
