@@ -3,6 +3,30 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 
+// Console Log Interceptor for Serverless Debugging
+const logBuffer = [];
+const originalLog = console.log;
+const originalError = console.error;
+const originalWarn = console.warn;
+
+console.log = (...args) => {
+  logBuffer.push({ type: 'log', message: args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' '), time: new Date().toISOString() });
+  if (logBuffer.length > 200) logBuffer.shift();
+  originalLog.apply(console, args);
+};
+
+console.error = (...args) => {
+  logBuffer.push({ type: 'error', message: args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' '), time: new Date().toISOString() });
+  if (logBuffer.length > 200) logBuffer.shift();
+  originalError.apply(console, args);
+};
+
+console.warn = (...args) => {
+  logBuffer.push({ type: 'warn', message: args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' '), time: new Date().toISOString() });
+  if (logBuffer.length > 200) logBuffer.shift();
+  originalWarn.apply(console, args);
+};
+
 // Import Routes
 import authRoutes from './routes/authRoutes.js';
 import workoutRoutes from './routes/workoutRoutes.js';
@@ -44,6 +68,11 @@ app.use('/api/progress', progressRoutes);
 // Health check endpoint
 app.get('/api/_wake', (req, res) => {
   res.status(200).json({ status: 'ok' });
+});
+
+// Debug logs endpoint
+app.get('/api/debug-logs', (req, res) => {
+  res.status(200).json(logBuffer);
 });
 
 // Catch-all for API routes to debug 404s
