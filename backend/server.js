@@ -72,7 +72,18 @@ app.get('/api/_wake', (req, res) => {
 
 // Debug logs endpoint
 app.get('/api/debug-logs', (req, res) => {
-  res.status(200).json(logBuffer);
+  const mongoUri = process.env.MONGO_URI || '';
+  const obfuscatedMongoUri = mongoUri.replace(/:([^:@]+)@/, ':******@');
+  
+  res.status(200).json({
+    env: {
+      MONGO_URI_EXISTS: !!process.env.MONGO_URI,
+      MONGO_URI: obfuscatedMongoUri,
+      JWT_SECRET_EXISTS: !!process.env.JWT_SECRET,
+      NODE_ENV: process.env.NODE_ENV,
+    },
+    logs: logBuffer,
+  });
 });
 
 // Catch-all for API routes to debug 404s
